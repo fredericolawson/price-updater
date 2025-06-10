@@ -26,6 +26,6 @@ function processProducts(products: any) {
       currency: product.node.contextualPricing.maxVariantPricing.price.currencyCode,
     }
   })
-	.sort((a: any, b: any) => a.price - b.price)
+	// .sort((a: any, b: any) => a.price - b.price)
 	.sort((a: any, b: any) => a.type - b.type);
 }

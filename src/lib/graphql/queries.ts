@@ -22,7 +22,7 @@ export const GET_PRODUCTS = gql`
           id
           title
           productType
-          contextualPricing(context: { country: GB }) {
+          contextualPricing(context: { country: US }) {
             maxVariantPricing {
               price {
                 amount
