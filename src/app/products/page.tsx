@@ -1,53 +1,31 @@
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
-import { GET_PRODUCTS } from "@/lib/graphql/queries";
-import { shopifyClient } from "@/lib/shopify-client";
+
+import { GET_PRODUCTS } from '@/lib/graphql/queries';
+import { shopifyClient } from '@/lib/shopify-client';
+import { ProductTable } from '@/components/product-table';
 
 
 export default async function ProductsPage() {
+  const response: any = await shopifyClient.request(GET_PRODUCTS, {
+    query: 'status:ACTIVE AND collection_id:275853803684',
+  });
 
+  const processedProducts = processProducts(response.products.edges);
 
-	return(
-		<ProductTable />
-	
-	)
+  return <ProductTable products={processedProducts} />;
 }
 
-async function getProducts() {
-	const products = await shopifyClient.request(GET_PRODUCTS, {
-		query: "type:product"
-	});
 
-	return products;
-}
 
-function ProductTable() {
-	return (
-<Table>
-		<TableCaption>A list of your recent invoices.</TableCaption>
-		<TableHeader>
-			<TableRow>
-				<TableHead className="w-[100px]">Invoice</TableHead>
-				<TableHead>Status</TableHead>
-				<TableHead>Method</TableHead>
-				<TableHead className="text-right">Amount</TableHead>
-			</TableRow>
-		</TableHeader>
-		<TableBody>
-			<TableRow>
-				<TableCell className="font-medium">INV001</TableCell>
-				<TableCell>Paid</TableCell>
-				<TableCell>Credit Card</TableCell>
-				<TableCell className="text-right">$250.00</TableCell>
-			</TableRow>
-		</TableBody>
-	</Table>	
-	)
+function processProducts(products: any) {
+  return products.map((product: any) => {
+    return {
+      id: product.node.id.split('/').pop(),
+      name: product.node.title.split(' | ')[0],
+      type: product.node.productType,
+      price: product.node.contextualPricing.maxVariantPricing.price.amount,
+      currency: product.node.contextualPricing.maxVariantPricing.price.currencyCode,
+    }
+  })
+	.sort((a: any, b: any) => a.price - b.price)
+	.sort((a: any, b: any) => a.type - b.type);
 }
