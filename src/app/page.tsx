@@ -1,6 +1,7 @@
 import { GET_PRODUCTS } from '@/lib/graphql/queries';
 import { shopifyClient } from '@/lib/shopify-client';
 import { ProductTable } from '@/components/product-table';
+import { Product } from '@/types';
 
 export default async function ProductsPage() {
   const response: any = await shopifyClient.request(GET_PRODUCTS, {
@@ -21,6 +22,7 @@ function processProducts(products: any) {
       price: product.node.contextualPricing.maxVariantPricing.price.amount,
       currency: product.node.contextualPricing.maxVariantPricing.price.currencyCode,
       image: product.node.featuredMedia.preview.image.url,
+      cost: product.node.variants.nodes[0].inventoryItem.unitCost?.amount,
     };
   });
 
@@ -30,12 +32,3 @@ function processProducts(products: any) {
 
   return sortedProducts as Product[];
 }
-
-type Product = {
-  id: string;
-  name: string;
-  type: string;
-  price: number;
-  currency: string;
-  image: string;
-};

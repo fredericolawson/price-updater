@@ -1,6 +1,7 @@
 import { GET_PRODUCTS } from '@/lib/graphql/queries';
 import { shopifyClient } from '@/lib/shopify-client';
 import { ProductTable } from '@/components/product-table';
+import { Product } from '@/types';
 
 export default async function ProductsPage() {
   const response: any = await shopifyClient.request(GET_PRODUCTS, {
@@ -30,12 +31,3 @@ function processProducts(products: any) {
 
   return sortedProducts as Product[];
 }
-
-type Product = {
-  id: string;
-  name: string;
-  type: string;
-  price: number;
-  currency: string;
-  image: string;
-};

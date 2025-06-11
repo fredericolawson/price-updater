@@ -12,8 +12,9 @@ import { updateShopify } from '@/app/actions/update-shopify';
 import { toast } from 'sonner';
 import { Separator } from './ui/separator';
 import Image from 'next/image';
+import { Product } from '@/types';
 
-export function ProductTable({ products }: { products: any }) {
+export function ProductTable({ products }: { products: Product[] }) {
   console.log(products[0]);
   const [normalise, setNormalise] = useState(false);
   return (
@@ -33,9 +34,10 @@ export function ProductTable({ products }: { products: any }) {
             <TableHead className="w-[100px]">Name</TableHead>
             <TableHead>Type</TableHead>
             <TableHead>Link</TableHead>
-            <TableHead>GBP Price</TableHead>
-            <TableHead>USD Price</TableHead>
-            <TableHead>New USD Price</TableHead>
+            <TableHead className="w-[80px]">Cost</TableHead>
+            <TableHead className="w-[80px]">GBP Price</TableHead>
+            <TableHead className="w-[80px]">USD Price</TableHead>
+            <TableHead className="w-[80px]">New USD Price</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -63,8 +65,9 @@ function ProductRow({ product, normalise }: { product: any; normalise: boolean }
           </a>
         </Button>
       </TableCell>
-      <TableCell>£{Math.round(product.price * 0.74)}</TableCell>
-      <TableCell>${product.price}</TableCell>
+      <TableCell>${product.cost ? product.cost : '0.00'}</TableCell>
+      <TableCell>£{Math.round(product.price * 0.745)}</TableCell>
+      <TableCell>${Math.round(product.price)}</TableCell>
       <TableCell>
         <ProductForm product={product} normalise={normalise} />
       </TableCell>
@@ -75,7 +78,7 @@ function ProductRow({ product, normalise }: { product: any; normalise: boolean }
 export function ProductForm({ product, normalise }: { product: any; normalise: boolean }) {
   const [isPending, startTransition] = useTransition();
 
-  const price = normalise ? Math.round((product.price * 1.3) / 5) * 5 : product.price;
+  const price = normalise ? Math.round((product.price * 1.3) / 5) * 5 : '';
 
   const formSchema = z.object({
     price: z.string().min(1, {
@@ -86,7 +89,7 @@ export function ProductForm({ product, normalise }: { product: any; normalise: b
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      price: price,
+      price: '',
     },
   });
 
@@ -121,7 +124,7 @@ export function ProductForm({ product, normalise }: { product: any; normalise: b
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Input placeholder="10.00" {...field} type="number" min={0} className="bg-card" />
+                <Input placeholder="$" {...field} type="number" min={0} className="bg-card w-[80px]" />
               </FormControl>
               <FormMessage />
             </FormItem>

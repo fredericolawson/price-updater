@@ -37,6 +37,18 @@ export const GET_PRODUCTS = gql`
               }
             }
           }
+          variants(first: 1) {
+            nodes {
+              id
+              title
+              inventoryItem {
+                unitCost {
+                  amount
+                  currencyCode
+                }
+              }
+            }
+          }
         }
       }
     }
