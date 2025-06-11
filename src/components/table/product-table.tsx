@@ -24,7 +24,7 @@ export function ProductTable({ products }: { products: Product[] }) {
       <Separator />
       <Table>
         <TableCaption>Products</TableCaption>
-        <TableHeader>
+        <TableHeader className="bg-background sticky top-0 z-10">
           <TableRow>
             <TableHead className="w-[100px]">Image</TableHead>
             <TableHead className="w-[100px]">Name</TableHead>
