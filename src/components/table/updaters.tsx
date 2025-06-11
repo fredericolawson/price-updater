@@ -1,87 +1,14 @@
 'use client';
 
-import { Table, TableCaption, TableHeader, TableBody, TableRow, TableHead, TableCell } from './ui/table';
-import { useTransition, useState, useEffect } from 'react';
+import { useTransition, useEffect } from 'react';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Form, FormField, FormItem, FormControl, FormMessage } from './ui/form';
-import { Input } from './ui/input';
-import { Button } from './ui/button';
+import { Form, FormField, FormItem, FormControl, FormMessage } from '../ui/form';
+import { Input } from '../ui/input';
+import { Button } from '../ui/button';
 import { updateCost, updatePrice } from '@/app/actions/update-shopify';
 import { toast } from 'sonner';
-import { Separator } from './ui/separator';
-import Image from 'next/image';
-import { Product } from '@/types';
-import { ExternalLink, Link } from 'lucide-react';
-
-export function ProductTable({ products }: { products: Product[] }) {
-  const [normalise, setNormalise] = useState(false);
-  return (
-    <div className="space-y-6">
-      <div className="flex justify-between">
-        <h1 className="text-2xl font-bold">Products</h1>
-        <Button variant="outline" onClick={() => setNormalise(!normalise)}>
-          {normalise ? 'Revert' : 'Normalise'}
-        </Button>
-      </div>
-      <Separator />
-      <Table>
-        <TableCaption>Products</TableCaption>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-[100px]">Image</TableHead>
-            <TableHead className="w-[100px]">Name</TableHead>
-            <TableHead>Type</TableHead>
-            <TableHead>Link</TableHead>
-            <TableHead className="w-[80px]">GBP Price</TableHead>
-            <TableHead className="w-[80px]">USD Price</TableHead>
-            <TableHead className="w-[80px]">New USD Price</TableHead>
-            <TableHead className="w-[80px]">Margin</TableHead>
-            <TableHead className="w-[80px]">Cost</TableHead>
-            <TableHead className="w-[80px]">New Cost</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {products.map((product: any) => (
-            <ProductRow key={product.id} product={product} normalise={normalise} />
-          ))}
-        </TableBody>
-      </Table>
-    </div>
-  );
-}
-
-function ProductRow({ product, normalise }: { product: any; normalise: boolean }) {
-  const margin = product.cost ? ((product.price - product.cost) / product.price) * 100 : 0;
-
-  return (
-    <TableRow key={product.id}>
-      <TableCell>
-        <Image src={product.image} alt={product.name} width={50} height={50} className="rounded-md" />
-      </TableCell>
-      <TableCell className="font-medium">{product.name}</TableCell>
-      <TableCell>{product.type}</TableCell>
-      <TableCell>
-        <Button variant="outline" asChild>
-          <a href={`https://admin.shopify.com/store/cornelia-james-ltd/products/${product.id}`} target="_blank" rel="noopener noreferrer">
-            <Link className="h-4 w-4" /> View
-          </a>
-        </Button>
-      </TableCell>
-      <TableCell>£{Math.round(product.price * 0.745)}</TableCell>
-      <TableCell>${Math.round(product.price)}</TableCell>
-      <TableCell>
-        <UpdatePrice product={product} normalise={normalise} />
-      </TableCell>
-      <TableCell>{margin.toFixed(0)}%</TableCell>
-      <TableCell>${product.cost ? product.cost : '0.00'}</TableCell>
-      <TableCell>
-        <UpdateCost product={product} />
-      </TableCell>
-    </TableRow>
-  );
-}
 
 export function UpdatePrice({ product, normalise }: { product: any; normalise: boolean }) {
   const [isPending, startTransition] = useTransition();

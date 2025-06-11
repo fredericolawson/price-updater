@@ -1,6 +1,6 @@
 import { GET_PRODUCTS } from '@/lib/graphql/queries';
 import { shopifyClient } from '@/lib/shopify-client';
-import { ProductTable } from '@/components/product-table';
+import { ProductTable } from '@/components/table/product-table';
 import { Product } from '@/types';
 
 export default async function ProductsPage() {
