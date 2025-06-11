@@ -34,7 +34,7 @@ export function ProductTable({ products }: { products: any }) {
             <TableHead>Type</TableHead>
             <TableHead>Link</TableHead>
             <TableHead>GBP Price</TableHead>
-            <TableHead>Price</TableHead>
+            <TableHead>USD Price</TableHead>
             <TableHead>New USD Price</TableHead>
           </TableRow>
         </TableHeader>
@@ -63,10 +63,8 @@ function ProductRow({ product, normalise }: { product: any; normalise: boolean }
           </a>
         </Button>
       </TableCell>
-      <TableCell>{Math.round(product.price * 0.74)}</TableCell>
-      <TableCell>
-        {product.currency} {product.price}
-      </TableCell>
+      <TableCell>£{Math.round(product.price * 0.74)}</TableCell>
+      <TableCell>${product.price}</TableCell>
       <TableCell>
         <ProductForm product={product} normalise={normalise} />
       </TableCell>
