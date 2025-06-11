@@ -7,6 +7,9 @@ export const GET_PRODUCT_VARIANTS = gql`
         edges {
           node {
             id
+            inventoryItem {
+              id
+            }
           }
         }
       }
