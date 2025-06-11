@@ -3,8 +3,8 @@ import './globals.css';
 import { Toaster } from '@/components/ui/sonner';
 
 export const metadata: Metadata = {
-  title: 'Shopify Price Updater',
-  description: 'Update Shopify prices from a CSV file',
+  title: 'Cornelia James Price Engine',
+  description: 'Visualise and update CJ prices & COGs',
 };
 
 export default function RootLayout({

@@ -37,6 +37,7 @@ export function ProductTable({ products }: { products: Product[] }) {
             <TableHead className="w-[80px]">GBP Price</TableHead>
             <TableHead className="w-[80px]">USD Price</TableHead>
             <TableHead className="w-[80px]">New USD Price</TableHead>
+            <TableHead className="w-[80px]">Margin</TableHead>
             <TableHead className="w-[80px]">Cost</TableHead>
             <TableHead className="w-[80px]">New Cost</TableHead>
           </TableRow>
@@ -52,6 +53,8 @@ export function ProductTable({ products }: { products: Product[] }) {
 }
 
 function ProductRow({ product, normalise }: { product: any; normalise: boolean }) {
+  const margin = product.cost ? ((product.price - product.cost) / product.price) * 100 : 0;
+
   return (
     <TableRow key={product.id}>
       <TableCell>
@@ -71,6 +74,7 @@ function ProductRow({ product, normalise }: { product: any; normalise: boolean }
       <TableCell>
         <UpdatePrice product={product} normalise={normalise} />
       </TableCell>
+      <TableCell>{margin.toFixed(0)}%</TableCell>
       <TableCell>${product.cost ? product.cost : '0.00'}</TableCell>
       <TableCell>
         <UpdateCost product={product} />
