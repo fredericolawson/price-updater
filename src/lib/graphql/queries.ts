@@ -30,6 +30,13 @@ export const GET_PRODUCTS = gql`
               }
             }
           }
+          featuredMedia {
+            preview {
+              image {
+                url
+              }
+            }
+          }
         }
       }
     }

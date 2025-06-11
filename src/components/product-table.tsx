@@ -11,8 +11,10 @@ import { Button } from './ui/button';
 import { updateShopify } from '@/app/actions/update-shopify';
 import { toast } from 'sonner';
 import { Separator } from './ui/separator';
+import Image from 'next/image';
 
 export function ProductTable({ products }: { products: any }) {
+  console.log(products[0]);
   const [normalise, setNormalise] = useState(false);
   return (
     <div className="space-y-6">
@@ -27,11 +29,13 @@ export function ProductTable({ products }: { products: any }) {
         <TableCaption>Products</TableCaption>
         <TableHeader>
           <TableRow>
+            <TableHead className="w-[100px]">Image</TableHead>
             <TableHead className="w-[100px]">Name</TableHead>
             <TableHead>Type</TableHead>
             <TableHead>Link</TableHead>
+            <TableHead>GBP Price</TableHead>
             <TableHead>Price</TableHead>
-            <TableHead>New Price</TableHead>
+            <TableHead>New USD Price</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -47,6 +51,9 @@ export function ProductTable({ products }: { products: any }) {
 function ProductRow({ product, normalise }: { product: any; normalise: boolean }) {
   return (
     <TableRow key={product.id}>
+      <TableCell>
+        <Image src={product.image} alt={product.name} width={50} height={50} className="rounded-md" />
+      </TableCell>
       <TableCell className="font-medium">{product.name}</TableCell>
       <TableCell>{product.type}</TableCell>
       <TableCell>
@@ -56,8 +63,9 @@ function ProductRow({ product, normalise }: { product: any; normalise: boolean }
           </a>
         </Button>
       </TableCell>
+      <TableCell>{Math.round(product.price * 0.74)}</TableCell>
       <TableCell>
-        {product.price} {product.currency}
+        {product.currency} {product.price}
       </TableCell>
       <TableCell>
         <ProductForm product={product} normalise={normalise} />

@@ -20,10 +20,22 @@ function processProducts(products: any) {
       type: product.node.productType,
       price: product.node.contextualPricing.maxVariantPricing.price.amount,
       currency: product.node.contextualPricing.maxVariantPricing.price.currencyCode,
+      image: product.node.featuredMedia.preview.image.url,
     };
   });
 
-  return mappedProducts
+  const sortedProducts = mappedProducts
     .sort((a: any, b: any) => a.price - b.price)
     .sort((a: any, b: any) => (a.type < b.type ? -1 : a.type > b.type ? 1 : 0));
+
+  return sortedProducts as Product[];
 }
+
+type Product = {
+  id: string;
+  name: string;
+  type: string;
+  price: number;
+  currency: string;
+  image: string;
+};
