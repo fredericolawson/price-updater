@@ -104,6 +104,7 @@ export function UpdateCost({ product }: { product: any }) {
       }
     });
   }
+  const currencySymbol = product.type === 'Leather Gloves' || product.type === 'Suede Gloves' ? '€' : '$';
 
   return (
     <Form {...form}>
@@ -114,7 +115,7 @@ export function UpdateCost({ product }: { product: any }) {
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Input placeholder="$" {...field} type="number" min={0} className="bg-card w-[80px]" />
+                <Input placeholder={currencySymbol} {...field} type="number" min={0} className="bg-card w-[80px]" />
               </FormControl>
               <FormMessage />
             </FormItem>
