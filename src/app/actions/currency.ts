@@ -6,10 +6,13 @@ const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env
 
 // Update rates from Fixer API
 export async function updateRates() {
-  const response = await fetch(`https://api.fixer.io/latest?access_key=${process.env.FIXER_API_KEY}&base=USD`);
+  const response = await fetch(`https://data.fixer.io/api/latest?access_key=${process.env.FIXER_API_KEY}&base=USD`);
   const data = await response.json();
 
-  if (!data.success) throw new Error('Failed to fetch rates');
+  if (!data.success) {
+    console.error(data);
+    throw new Error(`Failed to fetch rates: ${data.error.type}`);
+  }
 
   const rates = Object.entries(data.rates).map(([currency, rate]) => ({
     currency_code: currency,
