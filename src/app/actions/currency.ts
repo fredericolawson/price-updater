@@ -6,19 +6,22 @@ const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env
 
 // Update rates from Fixer API
 export async function updateRates() {
-  const response = await fetch(`https://data.fixer.io/api/latest?access_key=${process.env.FIXER_API_KEY}&base=USD`);
+  const response = await fetch(`https://api.exchangerate.host/live?access_key=${process.env.EXCHANGERATE_API_KEY}`);
   const data = await response.json();
 
   if (!data.success) {
     console.error(data);
     throw new Error(`Failed to fetch rates: ${data.error.type}`);
   }
-
-  const rates = Object.entries(data.rates).map(([currency, rate]) => ({
-    currency_code: currency,
-    usd_rate: rate,
-    updated_at: new Date().toISOString(),
-  }));
+  const rates = Object.entries(data.quotes).map(([currencyPair, rate]) => {
+    // Extract currency code by removing "USD" prefix
+    const currency_code = currencyPair.replace('USD', '');
+    return {
+      currency_code,
+      usd_rate: rate as number,
+      updated_at: new Date().toISOString(),
+    };
+  });
 
   const { error } = await supabase.from('exchange_rates').upsert(rates, { onConflict: 'currency_code' });
 
